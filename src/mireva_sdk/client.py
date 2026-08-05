@@ -44,7 +44,7 @@ class MirevaClient:
         version = model_version or self.model_version
         if not version:
             raise MirevaValidationError("model_version is required")
-        url = f"{self.base_url}/predict"
+        url = f"{self.base_url}/v1/predict"
         params = {"model_version": version}
         try:
             with httpx.Client(timeout=self.timeout_s) as client:
@@ -57,7 +57,7 @@ class MirevaClient:
         return self._parse_prediction(r)
 
     def health_check(self) -> dict[str, object]:
-        url = f"{self.base_url}/health"
+        url = f"{self.base_url}/healthz"
         try:
             with httpx.Client(timeout=self.timeout_s) as client:
                 r = client.get(url, headers=self._headers)
@@ -70,7 +70,7 @@ class MirevaClient:
         return dict(r.json())
 
     def list_models(self) -> dict[str, object]:
-        url = f"{self.base_url}/model/versions"
+        url = f"{self.base_url}/v1/models"
         try:
             with httpx.Client(timeout=self.timeout_s) as client:
                 r = client.get(url, headers=self._headers)
