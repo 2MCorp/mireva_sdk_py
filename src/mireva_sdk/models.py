@@ -55,6 +55,7 @@ class MirevaClaimInput(BaseModel):
     policy_start_date: date | None = None
     policy_end_date: date | None = None
     patient_deceased_date: date | None = None
+    submission_date: date | None = None
     patient_history: list[MirevaClaimInput] = Field(
         default_factory=list,
         max_length=50,
