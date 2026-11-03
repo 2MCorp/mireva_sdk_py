@@ -16,7 +16,7 @@ Usage:
 from mireva_sdk import MirevaClient, MirevaClaimInput
 
 client = MirevaClient(
-    base_url="http://127.0.0.1:8945",
+    base_url="http://127.0.0.1:4657",
     api_key="mv_live_....your.key",
     model_version="mireva-origin",
 )
