@@ -18,6 +18,8 @@ class PatientBlock(BaseModel):
     patient_id: str
     age: int = Field(ge=0, le=150)
     gender_concept_id: int
+    allergy_concept_ids: list[int] = Field(default_factory=list, max_length=200)
+    poverty: bool | None = None
 
 
 class DiagnosisItem(BaseModel):
@@ -29,10 +31,20 @@ class DrugItem(BaseModel):
     concept_id: int
     quantity: float = 0.0
     days_supply: int = 0
+    unit_price: float | None = Field(default=None, ge=0)
+    tariff_unit_price: float | None = Field(default=None, ge=0)
 
 
 class ProcedureItem(BaseModel):
     concept_id: int
+    quantity: float = 1.0
+    unit_price: float | None = Field(default=None, ge=0)
+    tariff_unit_price: float | None = Field(default=None, ge=0)
+
+
+class FacilityBlock(BaseModel):
+    level: str | None = Field(default=None, max_length=8)
+    care_type: str | None = Field(default=None, max_length=8)
 
 
 class ProviderHistoryBlock(BaseModel):
@@ -63,6 +75,8 @@ class MirevaClaimInput(BaseModel):
     )
     provider_history: ProviderHistoryBlock | None = None
     provider_id: str | None = None
+    facility: FacilityBlock | None = None
+    provider_license_valid: bool | None = None
     raw_duplicate_of: str | None = None
 
 
