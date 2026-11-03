@@ -30,6 +30,7 @@ class DiagnosisItem(BaseModel):
 class LineContext(BaseModel):
     """Optional per-line context; MIREVA rules skip lines that omit it."""
 
+    line_id: str | None = Field(default=None, max_length=64)
     unit_price: float | None = Field(default=None, ge=0)
     tariff_unit_price: float | None = Field(default=None, ge=0)
     category_eligible: bool | None = None
@@ -93,6 +94,7 @@ class RuleFired(BaseModel):
     severity: Literal["LOW", "MEDIUM", "HIGH"] = "MEDIUM"
     detail: str
     source: Literal["hard_rule", "soft_rule"] = "soft_rule"
+    line_ids: list[str] = Field(default_factory=list)
 
 
 class HardRulesResult(BaseModel):

@@ -144,3 +144,18 @@ def test_claim_model_carries_context_fields():
     assert dumped["procedures"][0]["quantity"] == 2
     assert dumped["facility"] == {"level": "D", "care_type": "O"}
     assert dumped["provider_license_valid"] is False
+
+
+def test_rule_fired_carries_line_ids_and_defaults_empty():
+    from mireva_sdk.models import MirevaClaimInput, RuleFired
+
+    assert RuleFired(rule_id="r", detail="d").line_ids == []
+    assert RuleFired(rule_id="r", detail="d", line_ids=["item:1"]).model_dump()["line_ids"] == ["item:1"]
+    claim = MirevaClaimInput.model_validate(
+        {
+            "claim_id": "c", "visit": {"visit_start_date": "2025-03-10"},
+            "patient": {"patient_id": "p", "age": 4, "gender_concept_id": 8532},
+            "drugs": [{"concept_id": 1, "line_id": "item:1"}], "claimed_amount": 1,
+        }
+    )
+    assert claim.drugs[0].line_id == "item:1"
