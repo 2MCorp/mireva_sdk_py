@@ -129,7 +129,7 @@ def test_claim_model_carries_context_fields():
             "claim_id": "c1",
             "visit": {"visit_start_date": "2025-03-10"},
             "patient": {"patient_id": "p", "age": 4, "gender_concept_id": 8532, "allergy_concept_ids": [7], "poverty": True},
-            "drugs": [{"concept_id": 1, "unit_price": 12.0, "tariff_unit_price": 10.0}],
+            "drugs": [{"concept_id": 1, "unit_price": 12.0, "tariff_unit_price": 10.0, "category_eligible": False}],
             "procedures": [{"concept_id": 2, "quantity": 2, "unit_price": 5.0}],
             "claimed_amount": 10,
             "facility": {"level": "D", "care_type": "O"},
@@ -139,6 +139,8 @@ def test_claim_model_carries_context_fields():
     dumped = claim.model_dump(mode="json")
     assert dumped["patient"]["allergy_concept_ids"] == [7]
     assert dumped["drugs"][0]["tariff_unit_price"] == 10.0
+    assert dumped["drugs"][0]["category_eligible"] is False
+    assert dumped["procedures"][0]["care_type_compatible"] is None
     assert dumped["procedures"][0]["quantity"] == 2
     assert dumped["facility"] == {"level": "D", "care_type": "O"}
     assert dumped["provider_license_valid"] is False

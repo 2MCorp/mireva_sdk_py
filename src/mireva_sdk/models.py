@@ -27,19 +27,24 @@ class DiagnosisItem(BaseModel):
     source_code: str | None = None
 
 
-class DrugItem(BaseModel):
+class LineContext(BaseModel):
+    """Optional per-line context; MIREVA rules skip lines that omit it."""
+
+    unit_price: float | None = Field(default=None, ge=0)
+    tariff_unit_price: float | None = Field(default=None, ge=0)
+    category_eligible: bool | None = None
+    care_type_compatible: bool | None = None
+
+
+class DrugItem(LineContext):
     concept_id: int
     quantity: float = 0.0
     days_supply: int = 0
-    unit_price: float | None = Field(default=None, ge=0)
-    tariff_unit_price: float | None = Field(default=None, ge=0)
 
 
-class ProcedureItem(BaseModel):
+class ProcedureItem(LineContext):
     concept_id: int
     quantity: float = 1.0
-    unit_price: float | None = Field(default=None, ge=0)
-    tariff_unit_price: float | None = Field(default=None, ge=0)
 
 
 class FacilityBlock(BaseModel):
